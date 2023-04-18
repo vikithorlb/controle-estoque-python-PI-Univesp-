@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adicionar produto</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{{ url_for('static', filename='add.css') }}">
+</head>
+<body>
+	<h1>Adicionar produto</h1>
+	<form method="POST" action="/add">
+		<label for="nome">Nome:</label><br>
+		<input type="text" id="nome" name="nome"><br>
+		<label for="descricao">Descrição:</label><br>
+		<textarea id="descricao" name="descricao"></textarea><br>
+		<label for="quantidade">Quantidade:</label><br>
+		<input type="number" id="quantidade" name="quantidade"><br><br>
+		<input type="submit" value="Adicionar">
+	</form>
+</body>
+</html>
