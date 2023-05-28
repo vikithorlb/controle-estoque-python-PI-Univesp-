@@ -2,21 +2,28 @@
 <html>
 <head>
     <title>Meu estoque</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="static/index.css">
 </head>
 <body>
-    <h1>Meu estoque</h1>
+    <div class="centralizar">
+        <h1><img src="static/logo.png" width="150"> Meu estoque</h1>
+    </div>
+    <h1 class='centralizar'>Cadastrar novo produto</h1>
+    <form action="/add" method="POST">
+        <input type="number" name="codigo" placeholder="Código do produto" required>
+        <input type="text" name="nome" placeholder="Nome do produto" required>
+        <input type="number" name="quantidade" placeholder="Quantidade do produto" required>
+        <button type="submit">Adicionar produto</button><br><br>
+    </form>
     <table>
-        <thead>
+        <tbody>
+            {% for item in items %}
             <tr>
                 <th>Código</th>
                 <th>Nome</th>
                 <th>Quantidade</th>
                 <th>Operações</th>
             </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
             <tr>
                 <td>{{ item.codigo }}</td>
                 <td>{{ item.nome }}</td>
@@ -24,17 +31,17 @@
                 <td>
                     <form action="/update" method="POST">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <input type="text" name="nova_quantidade" placeholder="Nova quantidade">
+                        <input type="number" name="nova_quantidade" placeholder="Nova quantidade">
                         <button type="submit">Atualizar</button>
                     </form>
                     <form action="/retirar" method="POST">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <input type="text" name="quantidade_retirada" placeholder="Quantidade a ser retirada">
+                        <input type="number" name="quantidade_retirada" placeholder="Quantidade a ser retirada">
                         <button type="submit">Retirar</button>
                     </form>
                     <form action="/devolver" method="POST">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <input type="text" name="quantidade_devolvida" placeholder="Quantidade a ser devolvida">
+                        <input type="number" name="quantidade_devolvida" placeholder="Quantidade a ser devolvida">
                         <button type="submit">Devolver</button>
                     </form>
                     <form action="/delete" method="POST">
@@ -46,11 +53,5 @@
             {% endfor %}
         </tbody>
     </table>
-    <form action="/add" method="POST">
-        <input type="text" name="codigo" placeholder="Código do produto" required>
-        <input type="text" name="nome" placeholder="Nome do produto" required>
-        <input type="text" name="quantidade" placeholder="Quantidade do produto" required>
-        <button type="submit">Adicionar produto</button>
-    </form>
 </body>
 </html>
