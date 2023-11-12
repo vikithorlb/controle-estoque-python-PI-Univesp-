@@ -1,17 +1,46 @@
 /* Estilização para a página "index.html" */
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
+  font-family: 'Roboto', sans-serif;
+  background-color: #3e8e4146;
+  font-size: 16px;
+  margin-left: 250px;
+  padding-left: 10px;
+}
+
+#sidebar {
+  position: fixed;
+  left: 250px;
+  width: 250px;
+  height: 100%;
+  margin-left: -250px;
+  background: #2c662e;
+  color: white;
+}
+
+#sidebar header {
+  background-color: #245326;
+  font-size: 25px;
+  line-height: 52px;
+  text-align: center;
+}
+
+#sidebar header a {
+  color: #fff;
+  display: block;
+  text-decoration: none;
+}
+
+#sidebar .nav a{
+  color: #CFD8DC;
 }
 
 .container {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
 }
 
 table {
-  display: flex;
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -31,7 +60,7 @@ table th {
 form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 form label {
@@ -82,3 +111,12 @@ form input[type="submit"]:hover {
 .centralizar {
   text-align: center;
 }
+
+button {
+  width: 200px;
+  margin: auto;
+}
+
+a:focus, a:hover {  
+  border: 2px solid #F00;  
+}  
