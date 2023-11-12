@@ -21,6 +21,21 @@ def index():
     items = Item.query.all()
     return render_template('index.html', items=items)
 
+@app.route('/cadastro')
+def cadastro():
+    items = Item.query.all()
+    return render_template('cadastro.html', items=items)
+
+@app.route('/alterar')
+def alterar():
+    items = Item.query.all()
+    return render_template('alterar.html', items=items)
+
+@app.route('/excluir')
+def excluir():
+    items = Item.query.all()
+    return render_template('excluir.html', items=items)
+
 @app.route('/add', methods=['POST'])
 def add():
     codigo = request.form['codigo']
@@ -69,6 +84,19 @@ def delete():
         db.session.delete(item)
         db.session.commit()
     return redirect('/')
+
+@app.route('/pesquisa', methods=['GET', 'POST'])
+def pesquisa():
+    item = None
+    not_found = False
+
+    if request.method == 'POST':
+        codigo = request.form['codigo']
+        item = Item.query.filter_by(codigo=codigo).first()
+        if not item:
+            not_found = True
+
+    return render_template('pesquisa.html', item=item, not_found=not_found)
 
 if __name__ == '__main__':
     app.run(debug=True)
