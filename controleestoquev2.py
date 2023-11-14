@@ -1,12 +1,34 @@
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, redirect
-from api import app as api_app
+from flask_sqlalchemy import SQLAlchemy
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
+app.config['SECURITY_PASSWORD_SALT'] = 'seu_sal_de_seguranca_aqui'
+app.config['SECURITY_REGISTERABLE'] = True
+app.config['SECURITY_LOGIN_URL'] = '/login'
+app.config['SECURITY_LOGOUT_URL'] = '/logout'
+app.config['SECURITY_REGISTER_URL'] = '/register'
+app.config['SECURITY_POST_LOGIN_VIEW'] = '/'
+app.config['SECURITY_POST_LOGOUT_VIEW'] = '/'
+app.config['SECURITY_POST_REGISTER_VIEW'] = '/'
+
 db = SQLAlchemy(app)
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,83 +45,10 @@ def index():
     return render_template('index.html', items=items)
 
 @app.route('/cadastro')
+@login_required
 def cadastro():
     items = Item.query.all()
     return render_template('cadastro.html', items=items)
-
-@app.route('/alterar')
-def alterar():
-    items = Item.query.all()
-    return render_template('alterar.html', items=items)
-
-@app.route('/excluir')
-def excluir():
-    items = Item.query.all()
-    return render_template('excluir.html', items=items)
-
-@app.route('/add', methods=['POST'])
-def add():
-    codigo = request.form['codigo']
-    nome = request.form['nome']
-    quantidade = request.form['quantidade']
-    item = Item(codigo=codigo, nome=nome, quantidade=quantidade)
-    db.session.add(item)
-    db.session.commit()
-    return redirect('/')
-
-@app.route('/update', methods=['POST'])
-def update():
-    item_id = request.form['item_id']
-    nova_quantidade = request.form['nova_quantidade']
-    item = Item.query.get(item_id)
-    if item:
-        item.quantidade = nova_quantidade
-        db.session.commit()
-    return redirect('/')
-
-@app.route('/retirar', methods=['POST'])
-def retirar():
-    item_id = request.form['item_id']
-    quantidade_retirada = request.form['quantidade_retirada']
-    item = Item.query.get(item_id)
-    if item:
-        item.quantidade -= int(quantidade_retirada)
-        db.session.commit()
-    return redirect('/')
-
-@app.route('/devolver', methods=['POST'])
-def devolver():
-    item_id = request.form['item_id']
-    quantidade_devolvida = request.form['quantidade_devolvida']
-    item = Item.query.get(item_id)
-    if item:
-        item.quantidade += int(quantidade_devolvida)
-        db.session.commit()
-    return redirect('/')
-
-@app.route('/delete', methods=['POST'])
-def delete():
-    item_id = request.form['item_id']
-    item = Item.query.get(item_id)
-    if item:
-        db.session.delete(item)
-        db.session.commit()
-    return redirect('/')
-
-@app.route('/pesquisa', methods=['GET', 'POST'])
-def pesquisa():
-    item = None
-    not_found = False
-
-    if request.method == 'POST':
-        codigo = request.form['codigo']
-        item = Item.query.filter_by(codigo=codigo).first()
-        if not item:
-            not_found = True
-
-    return render_template('pesquisa.html', item=item, not_found=not_found)
-
-app.register_blueprint(api_app, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True)
