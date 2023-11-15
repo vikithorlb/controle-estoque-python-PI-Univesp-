@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, redirect
-from api import app as api_app
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
@@ -99,7 +99,7 @@ def pesquisa():
 
     return render_template('pesquisa.html', item=item, not_found=not_found)
 
-app.register_blueprint(api_app, url_prefix='/api')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
