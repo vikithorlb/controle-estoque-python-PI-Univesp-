@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy
+from api import api_bp
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///estoque.db'
@@ -12,9 +12,6 @@ class Item(db.Model):
     codigo = db.Column(db.Integer, nullable=False)
     nome = db.Column(db.String(50), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return f'<Item {self.id}>'
 
 @app.route('/')
 def index():
@@ -89,14 +86,14 @@ def delete():
 def pesquisa():
     item = None
     not_found = False
-
     if request.method == 'POST':
         codigo = request.form['codigo']
         item = Item.query.filter_by(codigo=codigo).first()
         if not item:
             not_found = True
-
     return render_template('pesquisa.html', item=item, not_found=not_found)
 
 if __name__ == '__main__':
+    app.register_blueprint(api_bp, url_prefix='/api')
     app.run(debug=True)
+
