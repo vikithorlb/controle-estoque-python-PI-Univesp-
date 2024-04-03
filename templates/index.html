@@ -8,26 +8,22 @@
 <body>
     <br>
     <br>
-    {% if current_user.is_authenticated %}
-        <h1 class='centralizar'>Produtos cadastrados</h1>
-        <table>
-            <tbody>
-                <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th>Quantidade</th>
-                </tr>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.codigo }}</td>
-                        <td>{{ item.nome }}</td>
-                        <td>{{ item.quantidade }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h1 class='centralizar'>Você precisa fazer login para acessar esta página.</h1>
-    {% endif %}
+    <h1 class='centralizar'>Produtos cadastrados</h1>
+    <table>
+        <tbody>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Quantidade</th>
+            </tr>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.codigo }}</td>
+                <td>{{ item.nome }}</td>
+                <td>{{ item.quantidade }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
