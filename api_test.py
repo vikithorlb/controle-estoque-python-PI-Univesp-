@@ -5,7 +5,7 @@ def obter_data_hora_formatada():
     agora = datetime.now()
     return agora.strftime("%Y-%m-%d %H:%M:%S")
 
-url = 'http://127.0.0.1:500'
+url = 'http://127.0.0.1:5000'
 
 response = requests.get(url)
 
