@@ -40,4 +40,3 @@ jobs:
           BRANCH: gh-pages
           FOLDER: .
 
-          echo test, and deploy your project.
