@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime
 
@@ -15,11 +16,14 @@ else:
 
 try:
     response = requests.get(url)
-
-with open('log.txt', 'a') as file:
-    file.write(f'{obter_data_hora_formatada()} - ')
-    if response.status_code == 200:
-        file.write('Teste da API bem-sucedido!\n')
-    else:
-        file.write(f'Falha ao testar a API: {response.status_code}\n')
+    with open('log.txt', 'a') as file:
+        file.write(f'{obter_data_hora_formatada()} - ')
+        if response.status_code == 200:
+            file.write('Teste da API bem-sucedido!\n')
+        else:
+            file.write(f'Falha ao testar a API: {response.status_code}\n')
+except requests.exceptions.RequestException as e:
+    # Lidar com falha de conexão
+    with open('log.txt', 'a') as file:
+        file.write(f'{obter_data_hora_formatada()} - Falha ao conectar ao servidor: {e}\n')
 
