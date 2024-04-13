@@ -5,9 +5,16 @@ def obter_data_hora_formatada():
     agora = datetime.now()
     return agora.strftime("%Y-%m-%d %H:%M:%S")
 
-url = 'http://127.0.0.1:5000'
+# Verifica se estamos no GitHub Actions
+if 'GITHUB_ACTIONS' in os.environ:
+    # Se estivermos no GitHub Actions, usar a URL do ambiente de CI
+    url = 'https://exemplo-ci.com/api'
+else:
+    # Caso contrário, usar a URL local para testes
+    url = 'http://127.0.0.1:5000'
 
-response = requests.get(url)
+try:
+    response = requests.get(url)
 
 with open('log.txt', 'a') as file:
     file.write(f'{obter_data_hora_formatada()} - ')
